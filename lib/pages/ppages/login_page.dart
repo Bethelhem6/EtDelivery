@@ -91,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               fontSize: 20.0,
             ),
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color.fromARGB(255, 82, 131, 84),
         ),
         backgroundColor: const Color.fromARGB(255, 210, 243, 205),
         body: SafeArea(
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.green,
+                          color: Color.fromARGB(255, 108, 155, 109),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(

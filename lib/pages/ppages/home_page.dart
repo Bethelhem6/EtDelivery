@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color:const Color.fromARGB(255, 82, 131, 84),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Padding(

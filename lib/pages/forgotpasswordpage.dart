@@ -77,8 +77,10 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               ),
               const SizedBox(height: 20),
               MaterialButton(
-                onPressed: () {},
-                color: Colors.lightGreen,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/verify');
+                },
+                color: Color.fromARGB(255, 176, 197, 150),
                 child: const Text('Reset Password'),
               ),
             ],

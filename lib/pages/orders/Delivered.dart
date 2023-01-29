@@ -77,10 +77,10 @@ class _DeliveredPageState extends State<DeliveredPage> {
                                                 color: Color.fromARGB(
                                                     255, 84, 168, 73),
                                               ),
-                                              child: const Center(
+                                              child: Center(
                                                 child: Text(
-                                                  'Delivered',
-                                                  style: TextStyle(
+                                                  doc['status'],
+                                                  style: const TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15,
@@ -112,11 +112,10 @@ class _DeliveredPageState extends State<DeliveredPage> {
                                     height: 10,
                                   ),
                                   RichTextWidget(
-                                      text1: "Total: ",
-                                      text2:
-                                          "Birr ${doc["TotalPricewithDelivery"]}",
-                                          
-                                          ),
+                                    text1: "Total: ",
+                                    text2:
+                                        "Birr ${doc["TotalPricewithDelivery"]}",
+                                  ),
                                   const SizedBox(
                                     height: 10,
                                   ),

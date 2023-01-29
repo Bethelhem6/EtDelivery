@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -77,10 +75,14 @@ class _SettingsPageState extends State<SettingsPage> {
         imageCard(),
         nameCard(),
         phoneCard(),
+        dateCard(),
         logoutCard(),
       ]),
     );
   }
+
+//there's something to add!!
+
 
   Widget imageCard() {
     return Container(
@@ -89,28 +91,28 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: const Color.fromARGB(255, 207, 206, 206),
+              backgroundImage:
+                  imgXFile == null ? null : FileImage(File(imgXFile!.path)),
+              // child: imgXFile == null
+              //     ? const Icon(
+              //         Icons.camera_alt,
+              //         size: 40,
+              //       )
+              //     : null,
+            ),
+            const SizedBox(height: 5),
+            const Icon(Icons.camera_alt),
             GestureDetector(
               onTap: () {
                 pickImageFromGallery();
               },
-              child: CircleAvatar(
-                radius: 60,
-                backgroundColor: const Color.fromARGB(255, 207, 206, 206),
-                backgroundImage:
-                    imgXFile == null ? null : FileImage(File(imgXFile!.path)),
-                child: imgXFile == null
-                    ? const Icon(
-                        Icons.camera_alt,
-                        // label: 'add photo',
-                        size: 40,
-                      )
-                    : null,
+              child: const Text(
+                'Change photo',
+                style: TextStyle(color: Colors.grey),
               ),
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'Add photo',
-              style: TextStyle(color: Colors.grey),
             ),
           ],
         ),
@@ -119,32 +121,33 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget nameCard() => Padding(
-        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
         child: Card(
           shadowColor: Colors.green,
           elevation: 3,
           child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
                 colors: [
-                  Color.fromARGB(26, 29, 150, 18),
-                  Color.fromARGB(31, 17, 104, 29)
+                  Color.fromARGB(26, 15, 15, 15),
+                  Color.fromARGB(26, 15, 15, 15),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
+              borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.all(8),
-            child: const ListTile(
-              leading: Icon(
+            child:  const ListTile(
+              leading:  Icon(
                 Icons.person,
                 color: Colors.orange,
               ),
               title: Text(
-                'their name',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                'name',
+                style:  TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              subtitle: Text(
+              subtitle:  Text(
                 'their email',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
               ),
@@ -154,20 +157,21 @@ class _SettingsPageState extends State<SettingsPage> {
       );
 
   Widget phoneCard() => Padding(
-        padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
         child: Card(
           shadowColor: Colors.green,
           elevation: 3,
           child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
                 colors: [
-                  Color.fromARGB(26, 29, 150, 18),
-                  Color.fromARGB(31, 17, 104, 29)
+                  Color.fromARGB(26, 15, 15, 15),
+                  Color.fromARGB(26, 15, 15, 15),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
+              borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.all(8),
             child: const ListTile(
@@ -187,20 +191,63 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       );
-  // SizedBox(height:20),
+
+  Widget dateCard() => Padding(
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+        child: Card(
+          shadowColor: Colors.green,
+          elevation: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(26, 15, 15, 15),
+                  Color.fromARGB(26, 15, 15, 15),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(12),
+              border: const Border(
+                top: BorderSide(color: Color(0xFFFFFFFF)),
+                left: BorderSide(color: Color(0xFFFFFFFF)),
+                right: BorderSide(color: Color(0xFFFFFFFF)),
+                bottom: BorderSide(color: Color(0xFFFFFFFF)),
+              ),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: const ListTile(
+              leading: Icon(
+                Icons.phone,
+                color: Colors.purple,
+              ),
+              title: Text(
+                'Joined Date',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                '',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+              ),
+            ),
+          ),
+        ),
+      );
+
   Widget logoutCard() => Card(
         shadowColor: Colors.green,
         elevation: 3,
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
               colors: [
-                Color.fromARGB(26, 29, 150, 18),
-                Color.fromARGB(31, 17, 104, 29)
+                Color.fromARGB(26, 15, 15, 15),
+                Color.fromARGB(26, 15, 15, 15),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
+            borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.all(8),
           child: ListTile(

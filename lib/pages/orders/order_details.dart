@@ -45,7 +45,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color.fromARGB(255, 44, 90, 46),
       ),
       body: ListView(padding: const EdgeInsets.all(6), children: [
         detailCard(),
@@ -132,10 +132,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                             decoration: const BoxDecoration(
                               color: Color.fromARGB(255, 241, 64, 51),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                'Pending',
-                                style: TextStyle(
+                                doc['status'],
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -200,7 +200,6 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           SizedBox(
             height: 10,
           ),
-         
         ],
       ),
     );

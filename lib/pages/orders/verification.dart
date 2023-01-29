@@ -33,15 +33,15 @@ class _VerificationPageState extends State<VerificationPage> {
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
-                const TextField(),
+                // const TextField(),
                 VerificationCode(
                   textStyle: Theme.of(context)
                       .textTheme
                       .bodyText2!
                       .copyWith(color: Theme.of(context).primaryColor),
                   keyboardType: TextInputType.number,
-                  underlineColor: Colors
-                      .black, // If this is null it will use primaryColor: Colors.red from Theme
+                  underlineColor: const Color.fromARGB(255, 3, 3,
+                      3), // If this is null it will use primaryColor: Colors.red from Theme
                   length: 4,
                   cursorColor: Colors
                       .blue, // If this is null it will default to the ambient
@@ -72,9 +72,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 ),
                 const SizedBox(height: 80),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/');
-                  },
+                  onTap: () {},
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(

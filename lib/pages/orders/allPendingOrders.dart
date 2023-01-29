@@ -228,8 +228,8 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                         child: Container(
                                           padding: const EdgeInsets.all(13),
                                           decoration: const BoxDecoration(
-                                            color: Color.fromARGB(
-                                                255, 84, 168, 73),
+                                            color:  Color.fromARGB(
+                                                255, 82, 131, 84),
                                           ),
                                           child: const Center(
                                             child: Text(
