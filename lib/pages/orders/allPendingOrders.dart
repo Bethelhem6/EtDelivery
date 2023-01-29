@@ -27,7 +27,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
         padding: const EdgeInsets.all(6),
         child:
             // pendingCard(),
-            ordersCard("processing orders", Colors.pinkAccent),
+            ordersCard("completed orders", Colors.pinkAccent),
       ),
     );
   }

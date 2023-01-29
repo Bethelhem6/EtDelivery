@@ -3,10 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dboy_two/pages/orders/orders_detail_widget.dart';
 import 'package:dboy_two/widgets.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
+// ignore: must_be_immutable
 class OrderDetailsPage extends StatefulWidget {
   String collection;
   String orderId;
@@ -24,7 +25,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
   XFile? imgXFile;
   final ImagePicker imagePicker = ImagePicker();
 
-  String SelectedImagePath = "";
+  // String SelectedImagePath = "";
 
   void paymentPhoto() async {
     imgXFile = await imagePicker.pickImage(source: ImageSource.camera);
@@ -199,20 +200,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           SizedBox(
             height: 10,
           ),
-          // SelectedImagePath == ''
-          //     ? const Icon(Icons.camera_alt_rounded)
-          //     : Image.file(
-          //         File(imgXFile!.path),
-          //         height: 200,
-          //         width: 200,
-          //         fit: BoxFit.fill,
-          //       ),
-          // CircleAvatar(
-          //   radius: 60,
-          //   backgroundColor: const Color.fromARGB(255, 207, 206, 206),
-          //   backgroundImage:
-          //       imgXFile == null ? null : FileImage(File(imgXFile!.path)),
-          // ),
+         
         ],
       ),
     );
