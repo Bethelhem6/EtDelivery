@@ -143,12 +143,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.orange,
               ),
               title: Text(
-                'name',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                'Name',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
               subtitle: Text(
-                'their email',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                '',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
@@ -176,15 +180,19 @@ class _SettingsPageState extends State<SettingsPage> {
             child: const ListTile(
               leading: Icon(
                 Icons.phone,
-                color: Colors.purple,
+                color: Colors.black,
               ),
               title: Text(
                 'Phone Number',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
               subtitle: Text(
-                '0977797876',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                '',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
@@ -217,16 +225,20 @@ class _SettingsPageState extends State<SettingsPage> {
             padding: const EdgeInsets.all(8),
             child: const ListTile(
               leading: Icon(
-                Icons.phone,
-                color: Colors.purple,
+                Icons.date_range_outlined,
+                color: Colors.black,
               ),
               title: Text(
                 'Joined Date',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
               subtitle: Text(
                 '',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
             ),
           ),

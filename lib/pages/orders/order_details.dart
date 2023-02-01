@@ -4,13 +4,10 @@ import 'package:dboy_two/pages/orders/orders_detail_widget.dart';
 import 'package:dboy_two/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:url_launcher/url_launcher.dart';
-import 'package:dboy_two/pages/location_widget.dart';
-// import 'dart:io';
-
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 
 // ignore: must_be_immutable
 class OrderDetailsPage extends StatefulWidget {
@@ -38,55 +35,54 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       imgXFile;
     });
   }
-
-  String locationMessage = 'Current Location of Delivery person';
   late String lat;
   late String long;
+  String locationMessage = 'Current Location of Delivery person';
 
-  Future<Position> _getCurrentLocation() async {
+  Future<Position> _getCurrentLocation() async{
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+    if (!serviceEnabled){
+      return Future.error('Location service is diasabled');
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
+    if (permission == LocationPermission.denied){
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permission are denied');
+      if (permission == LocationPermission.denied){
+        return Future.error('Location permissions are denied');
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, cant request');
+    if (permission == LocationPermission.deniedForever){
+      return Future.error('Location permissions are permanently denied, can not request');
     }
+
     return await Geolocator.getCurrentPosition();
   }
 
-  void _liveLocation() {
+  void _liveLocation(){
     LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 100,
     );
 
     Geolocator.getPositionStream(locationSettings: locationSettings)
-        .listen((Position position) {
-      lat = position.latitude.toString();
-      long = position.longitude.toString();
+    .listen((Position position) {
+      lat= position.latitude.toString();
+      long= position.longitude.toString();
 
       setState(() {
-        locationMessage = 'Latitude: $lat , Longitude: $long';
+        locationMessage = 'Latitude: $lat, Longitude: $long';
       });
-    });
+     });
   }
 
-  Future<void> _openMap(String lat, String long) async {
-    String googleURL =
-        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+  Future<void> _openMap(String lat, String long) async{
+    String googleURL = 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+
     await canLaunchUrlString(googleURL)
-        ? await launchUrlString(googleURL)
-        : throw 'Could not launch $googleURL';
+      ? await launchUrlString(googleURL)
+      : throw 'Could not launch $googleURL';
   }
 
   TextEditingController controller = TextEditingController();
@@ -227,38 +223,45 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   RichTextWidget(
                       text1: 'Address: ',
                       text2: doc["delivery information"]['city']),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 10),
                   RichTextWidget(
                       text1: 'Payment Status: ', text2: doc['status']),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   RichTextWidget(
                     text1: 'Total: ',
                     text2: "Birr ${doc["TotalPricewithDelivery"].toString()}",
                   ),
-                  const SizedBox(height: 10),
-                  const Text('Turn on Location'),
+
+                  //customers location information to be copied
+
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Turn on Location',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.grey),
+                  ),
                   const SizedBox(height: 5),
+                  
+                  //click
                   ElevatedButton(
                     onPressed: () {
                       _getCurrentLocation().then((value) {
                         lat = '${value.latitude}';
-                        long = '${value.longitude}';
+                        long= '${value.longitude}';
                         setState(() {
-                          locationMessage = 'Latitude: $lat , Longitude: $long';
+                          locationMessage = 'Latitude : $lat, Longitude: $long';
                         });
                         _liveLocation();
                       });
-                    },
-                    child: const Text(
-                      'Click for Current Location',
-                    ),
-                  ),
+                    }, 
+                    child: const Text('Get Current Location')),
                   const SizedBox(height: 5),
                   Row(
                     children: const [
                       Text(
                         'Next',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.grey),
                       ),
                       Icon(
                         Icons.arrow_downward_sharp,
@@ -267,12 +270,13 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     ],
                   ),
 
-                  const SizedBox(height: 5),
+                  //open google map
                   ElevatedButton(
-                      onPressed: () {
-                        _openMap(lat, long);
-                      },
-                      child: const Text('Open Google Map')),
+                    onPressed: () {
+                      _openMap(lat, long);
+                    }, 
+                    child: const Text('Open Google Map'),
+                    ),
                   const SizedBox(height: 20),
                   OrdersDetail(
                       document: widget.orderId, collection: widget.collection),
