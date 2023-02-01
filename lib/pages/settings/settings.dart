@@ -83,7 +83,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
 //there's something to add!!
 
-
   Widget imageCard() {
     return Container(
       child: Padding(
@@ -138,16 +137,16 @@ class _SettingsPageState extends State<SettingsPage> {
               borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.all(8),
-            child:  const ListTile(
-              leading:  Icon(
+            child: const ListTile(
+              leading: Icon(
                 Icons.person,
                 color: Colors.orange,
               ),
               title: Text(
                 'name',
-                style:  TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              subtitle:  Text(
+              subtitle: Text(
                 'their email',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
               ),

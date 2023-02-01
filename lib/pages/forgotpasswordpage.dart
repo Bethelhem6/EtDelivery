@@ -39,7 +39,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Password Reset"),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color.fromARGB(255, 44, 90, 46),
         ),
         body: Center(
           child: Column(
@@ -80,7 +80,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
                 onPressed: () {
                   Navigator.pushNamed(context, '/verify');
                 },
-                color: Color.fromARGB(255, 176, 197, 150),
+                color: Color.fromARGB(255, 108, 155, 109),
                 child: const Text('Reset Password'),
               ),
             ],

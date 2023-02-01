@@ -18,7 +18,7 @@ class _VerificationPageState extends State<VerificationPage> {
         appBar: AppBar(
           title: const Text('Verification Code'),
           centerTitle: true,
-          backgroundColor: Colors.green,
+          backgroundColor: const Color.fromARGB(255, 44, 90, 46),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -29,7 +29,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 const Padding(
                   padding: EdgeInsets.all(18.0),
                   child: Text(
-                    'We have send you the verification Code to phone_number.',
+                    'We have send you the verification Code to your E-mail.',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
@@ -78,7 +78,7 @@ class _VerificationPageState extends State<VerificationPage> {
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: Color.fromARGB(255, 108, 155, 109),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Center(
