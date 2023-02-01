@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -15,47 +16,56 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   XFile? imgXFile;
+  var _url;
+  String _uid = "";
+  String _phoneNumber = "";
+  String _name = "";
+  String _joinedDate = "";
+  File? _image;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
   final ImagePicker imagePicker = ImagePicker();
 
-  // Future getImage() async {
-  //   // ignore: deprecated_member_use
-  //   final image = await imagePicker.getImage(source: ImageSource.camera);
-  //   setState(() {
-  //     _image = File(image!.path);
-  //   });
-  // }
+  void _getData() async {
+    User? user = _auth.currentUser;
+    _uid = user!.uid;
 
-  // Future<bool> _onWillPop() async {
-  //   return (await showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           title: const Text('Are you sure?'),
-  //           content: const Text('Do you want to Exit?'),
-  //           actions: <Widget>[
-  //             TextButton(
-  //               onPressed: () => Navigator.of(context).pop(false),
-  //               child: const Text('No'),
-  //             ),
-  //             TextButton(
-  //               onPressed: () => Navigator.of(context).pop(true),
-  //               child: const Text('Yes'),
-  //             ),
-  //           ],
-  //         ),
-  //       )) ??
-  //       false;
-  // }
+    final DocumentSnapshot userDocs = await FirebaseFirestore.instance
+        .collection("delivery person")
+        .doc(_uid)
+        .get();
+    setState(() {
+      _phoneNumber = userDocs.get('phoneNumber').toString();
+      _name = userDocs.get('name');
+      _url = userDocs.get("imageUrl");
+      _joinedDate = userDocs.get("joinedDate");
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _getData();
   }
 
-  void pickImageFromGallery() async {
-    imgXFile = await imagePicker.pickImage(source: ImageSource.gallery);
+  Future _getImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    
     setState(() {
-      imgXFile;
+      _image = File(image!.path);
     });
+    final ref =
+        FirebaseStorage.instance.ref().child('adminImage').child('$_name.jpg');
+
+    await ref.putFile(_image!);
+    _url = await ref.getDownloadURL();
+    await FirebaseFirestore.instance
+        .collection("delivery person")
+        .doc(_uid)
+        .update({
+      "imageUrl": _url,
+    });
+    setState(() {});
   }
 
   @override
@@ -71,13 +81,17 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         backgroundColor: const Color.fromARGB(255, 44, 90, 46),
       ),
-      body: ListView(padding: const EdgeInsets.all(6), children: [
-        imageCard(),
-        nameCard(),
-        phoneCard(),
-        dateCard(),
-        logoutCard(),
-      ]),
+      body: StreamBuilder<Object>(
+          stream: null,
+          builder: (context, snapshot) {
+            return ListView(padding: const EdgeInsets.all(6), children: [
+              imageCard(),
+              nameCard(),
+              phoneCard(),
+              dateCard(),
+              logoutCard(),
+            ]);
+          }),
     );
   }
 
@@ -93,20 +107,13 @@ class _SettingsPageState extends State<SettingsPage> {
             CircleAvatar(
               radius: 60,
               backgroundColor: const Color.fromARGB(255, 207, 206, 206),
-              backgroundImage:
-                  imgXFile == null ? null : FileImage(File(imgXFile!.path)),
-              // child: imgXFile == null
-              //     ? const Icon(
-              //         Icons.camera_alt,
-              //         size: 40,
-              //       )
-              //     : null,
+              backgroundImage: _url == null ? null : NetworkImage(_url!),
             ),
             const SizedBox(height: 5),
             const Icon(Icons.camera_alt),
             GestureDetector(
               onTap: () {
-                pickImageFromGallery();
+                _getImage();
               },
               child: const Text(
                 'Change photo',
@@ -137,20 +144,20 @@ class _SettingsPageState extends State<SettingsPage> {
               borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.all(8),
-            child: const ListTile(
-              leading: Icon(
+            child: ListTile(
+              leading: const Icon(
                 Icons.person,
                 color: Colors.orange,
               ),
-              title: Text(
+              title: const Text(
                 'Name',
                 style: TextStyle(
                   fontSize: 15,
                 ),
               ),
               subtitle: Text(
-                '',
-                style: TextStyle(
+                _name,
+                style: const TextStyle(
                   fontSize: 15,
                 ),
               ),
@@ -177,20 +184,20 @@ class _SettingsPageState extends State<SettingsPage> {
               borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.all(8),
-            child: const ListTile(
-              leading: Icon(
+            child: ListTile(
+              leading: const Icon(
                 Icons.phone,
                 color: Colors.black,
               ),
-              title: Text(
+              title: const Text(
                 'Phone Number',
                 style: TextStyle(
                   fontSize: 15,
                 ),
               ),
               subtitle: Text(
-                '',
-                style: TextStyle(
+                _phoneNumber,
+                style: const TextStyle(
                   fontSize: 15,
                 ),
               ),
@@ -223,20 +230,20 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             padding: const EdgeInsets.all(8),
-            child: const ListTile(
-              leading: Icon(
+            child: ListTile(
+              leading: const Icon(
                 Icons.date_range_outlined,
                 color: Colors.black,
               ),
-              title: Text(
+              title: const Text(
                 'Joined Date',
                 style: TextStyle(
                   fontSize: 15,
                 ),
               ),
               subtitle: Text(
-                '',
-                style: TextStyle(
+                _joinedDate,
+                style: const TextStyle(
                   fontSize: 15,
                 ),
               ),

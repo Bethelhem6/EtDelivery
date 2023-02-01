@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -41,31 +43,27 @@ class _LoginPageState extends State<LoginPage> {
         final newUser = await _auth.signInWithEmailAndPassword(
             email: _email.toLowerCase().trim(),
             password: _password.toLowerCase().trim());
-        Navigator.pushNamed(context, '/mainpage');
-        // if (newUser != null) {
-        //   User? user = _auth.currentUser;
-        //   _uid = user!.uid;
-        //   final DocumentSnapshot result = await FirebaseFirestore.instance
-        //       .collection('users')
-        //       .doc(_uid)
-        //       .get()
 
-        // String role = result.get('role');
-        // if (role == 'customer') {
-        //   Navigator.pop(context);
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) =>const HomeHeader()),
-        // );
-        // }
-        // else {
-        //   if (mounted) {
-        //     _globalMethods.showDialogues(
-        //         context, 'It is not customer account.');
-        //   }
-        // }
-        // }
-        // print("logged in");
+        if (newUser != null) {
+          User? user = _auth.currentUser;
+          _uid = user!.uid;
+          final DocumentSnapshot result = await FirebaseFirestore.instance
+              .collection('delivery person')
+              .doc(_uid)
+              .get();
+
+          String role = result.get('role');
+          if (role == 'deliveryPerson') {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/mainpage');
+          } else {
+            if (mounted) {
+              _globalMethods.showDialogues(
+                  context, 'It is not delivery person account.');
+            }
+          }
+        }
+        print("logged in");
       } catch (e) {
         if (mounted) {
           _globalMethods.showDialogues(context, e.toString());
@@ -210,9 +208,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: Center(
                           child: _isLoading
-                              ? const CircularProgressIndicator()
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
                               : const Text(
-                                  'Sign in',
+                                  'SIGN IN',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

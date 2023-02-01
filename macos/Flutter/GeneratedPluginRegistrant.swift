@@ -11,7 +11,7 @@ import firebase_core
 import firebase_storage
 import geolocator_apple
 import location
-import path_provider_macos
+import path_provider_foundation
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
