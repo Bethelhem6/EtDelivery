@@ -23,6 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String _uid = "";
   String _phoneNumber = "";
   String _name = "";
+  String _email = "";
   String _joinedDate = "";
   File? _image;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,6 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       _phoneNumber = userDocs.get('phoneNumber').toString();
       _name = userDocs.get('name');
+      _email = userDocs.get('email');
       _url = userDocs.get("imageUrl");
       _joinedDate = userDocs.get("joinedDate");
     });
@@ -92,6 +94,27 @@ class _SettingsPageState extends State<SettingsPage> {
         false;
   }
 
+  logoutMessage() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to Logout?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pushNamed(context, '/login_page'),
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,6 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
             return ListView(padding: const EdgeInsets.all(6), children: [
               imageCard(),
               nameCard(),
+              emailCard(),
               phoneCard(),
               dateCard(),
               changePassword(),
@@ -182,6 +206,46 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               subtitle: Text(
                 _name,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Widget emailCard() => Padding(
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+        child: Card(
+          shadowColor: Colors.green,
+          elevation: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(26, 15, 15, 15),
+                  Color.fromARGB(26, 15, 15, 15),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: ListTile(
+              leading: const Icon(
+                Icons.person,
+                color: Colors.orange,
+              ),
+              title: const Text(
+                'Email',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              subtitle: Text(
+                _email,
                 style: const TextStyle(
                   fontSize: 15,
                 ),
@@ -320,44 +384,41 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       );
 
-  Widget logoutCard() {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Card(
-        shadowColor: Colors.green,
-        elevation: 3,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [
-                Color.fromARGB(26, 15, 15, 15),
-                Color.fromARGB(26, 15, 15, 15),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+  Widget logoutCard() => Padding(
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+        child: Card(
+          shadowColor: Colors.green,
+          elevation: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(26, 15, 15, 15),
+                  Color.fromARGB(26, 15, 15, 15),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(12),
             ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.all(8),
-          child: ListTile(
-            onTap: () async {
-              await FirebaseAuth.instance.signOut();
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacementNamed(context, '/home_page');
-            },
-            leading: const Icon(
-              Icons.logout,
-              color: Colors.red,
-            ),
-            title: const Text(
-              'Logout',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.all(8),
+            child: ListTile(
+              onTap: () {
+                logoutMessage();
+              },
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.red,
+              ),
+              title: const Text(
+                'Logout',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
+
   // Widget logoutCard() => WillPopScope(
   //       onWillPop: _onWillPop,
   // padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),

@@ -27,9 +27,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
   XFile? imgXFile;
   final ImagePicker imagePicker = ImagePicker();
 
-  String _address = "";
   String _uid = "";
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _getData() async {
     User? user = _auth.currentUser;
@@ -37,9 +36,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
 
     final DocumentSnapshot userDocs =
         await FirebaseFirestore.instance.collection("customer").doc(_uid).get();
-    setState(() {
-      // _address = userDocs.get(['city']);
-    });
+    setState(() {});
   }
 
   @override
@@ -253,10 +250,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     text2:
                         (doc["customer information"]['phoneNumber']).toString(),
                   ),
-                  const SizedBox(height: 10),
-                  RichTextWidget(
-                      text1: 'Address: ',
-                      text2: doc["delivery information"]['city']),
+                  // const SizedBox(height: 10),
+                  // RichTextWidget(
+                  //     text1: 'Address: ',
+                  //     text2: doc["delivery information"]['city']),
                   const SizedBox(height: 10),
                   RichTextWidget(
                       text1: 'Payment Status: ', text2: doc['status']),
@@ -266,8 +263,33 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     text2: "Birr ${doc["TotalPricewithDelivery"].toString()}",
                   ),
 
-                  const Text("Address"),
-                  Text(_address),
+                  const SizedBox(height: 15),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const Icon(Icons.location_on, color: Colors.blue),
+                      const Text(
+                        'Address: ',
+                        style: TextStyle(
+                          letterSpacing: 1.0,
+                          color: Color.fromARGB(255, 41, 104, 155),
+                        ),
+                      ),
+                      SelectableText(
+                        doc['delivery information']['city'],
+                        style: const TextStyle(fontSize: 18),
+                        toolbarOptions: const ToolbarOptions(
+                          copy: true,
+                          selectAll: true,
+                        ),
+                        // showCursor: true,
+                        // cursorWidth: 10,
+                        // cursorColor: Colors.green,
+                      )
+                    ],
+                  ),
+                  // Text(_address),
+
                   // Row(
                   //   children: [
                   //     const ListTile(
@@ -289,7 +311,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
 
                   //customers location information to be copied
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                   const Text(
                     'Turn on Location',
                     style: TextStyle(
@@ -333,16 +355,16 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     },
                     child: const Text('Open Google Map'),
                   ),
+
                   const SizedBox(height: 20),
                   OrdersDetail(
                       document: widget.orderId, collection: widget.collection),
-                  // const SizedBox(height: 10),
+
                   GestureDetector(
                     onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 85.0),
                       child: Container(
-                        // padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 108, 155, 109),
                           borderRadius: BorderRadius.circular(12),
