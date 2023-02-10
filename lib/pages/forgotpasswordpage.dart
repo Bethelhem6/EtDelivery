@@ -1,3 +1,4 @@
+import 'package:dboy_two/pages/settings/reset_password.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassPage extends StatefulWidget {
@@ -78,9 +79,12 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
               const SizedBox(height: 20),
               MaterialButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/verify');
+                   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ResetPassword()));
                 },
-                color: Color.fromARGB(255, 108, 155, 109),
+                color: const Color.fromARGB(255, 108, 155, 109),
                 child: const Text('Reset Password'),
               ),
             ],

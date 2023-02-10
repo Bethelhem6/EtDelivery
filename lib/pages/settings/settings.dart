@@ -7,6 +7,9 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:image_picker/image_picker.dart';
 
+import 'change_pasword_page.dart';
+// import 'reset_password.dart';
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -50,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future _getImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    
+
     setState(() {
       _image = File(image!.path);
     });
@@ -66,6 +69,27 @@ class _SettingsPageState extends State<SettingsPage> {
       "imageUrl": _url,
     });
     setState(() {});
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to Logout?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
   }
 
   @override
@@ -89,6 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
               nameCard(),
               phoneCard(),
               dateCard(),
+              changePassword(),
               logoutCard(),
             ]);
           }),
@@ -189,6 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Icons.phone,
                 color: Colors.black,
               ),
+              // suffixIcon: Icon(Icons.edit),
               title: const Text(
                 'Phone Number',
                 style: TextStyle(
@@ -252,7 +278,52 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       );
 
-  Widget logoutCard() => Card(
+  Widget changePassword() => Padding(
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+        child: Card(
+          shadowColor: Colors.green,
+          elevation: 3,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(26, 15, 15, 15),
+                  Color.fromARGB(26, 15, 15, 15),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => const ChangePassword())));
+              },
+              child: const ListTile(
+                leading: Icon(
+                  Icons.question_mark_rounded,
+                  color: Colors.blue,
+                ),
+                title: Text(
+                  'Change Password',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Widget logoutCard() {
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Card(
         shadowColor: Colors.green,
         elevation: 3,
         child: Container(
@@ -284,7 +355,46 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
+  // Widget logoutCard() => WillPopScope(
+  //       onWillPop: _onWillPop,
+  // padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+  //   child: Card(
+  //     shadowColor: Colors.green,
+  //     elevation: 3,
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         gradient: const LinearGradient(
+  //           colors: [
+  //             Color.fromARGB(26, 15, 15, 15),
+  //             Color.fromARGB(26, 15, 15, 15),
+  //           ],
+  //           begin: Alignment.topCenter,
+  //           end: Alignment.bottomCenter,
+  //         ),
+  //         borderRadius: BorderRadius.circular(12),
+  //       ),
+  //       padding: const EdgeInsets.all(8),
+  //       child: ListTile(
+  //         onTap: () async {
+  //           await FirebaseAuth.instance.signOut();
+  //           // ignore: use_build_context_synchronously
+  //           Navigator.pushReplacementNamed(context, '/home_page');
+  //         },
+  //         leading: const Icon(
+  //           Icons.logout,
+  //           color: Colors.red,
+  //         ),
+  //         title: const Text(
+  //           'Logout',
+  //           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+  //         ),
+  //       ),
+  //     ),
+  //   ),
+  // );
 }
 
 

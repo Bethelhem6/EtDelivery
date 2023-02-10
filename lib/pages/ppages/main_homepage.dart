@@ -46,6 +46,7 @@ class _MainPageState extends State<MainPage> {
       onWillPop: _onWillPop,
       child: Scaffold(
         body: IndexedStack(
+          
           index: currentIndex,
           children: screens,
         ),

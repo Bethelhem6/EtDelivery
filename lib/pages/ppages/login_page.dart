@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../global_method.dart';
 import '../forgotpasswordpage.dart';
+import '../settings/reset_password.dart';
 // import '../pages/forgotpasswordpage.dart';
 
 // ignore: must_be_immutable
@@ -86,9 +87,10 @@ class _LoginPageState extends State<LoginPage> {
             'Welcome!!',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 20.0,
+              fontSize: 25.0,
             ),
           ),
+          centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 82, 131, 84),
         ),
         backgroundColor: const Color.fromARGB(255, 210, 243, 205),
@@ -177,13 +179,10 @@ class _LoginPageState extends State<LoginPage> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const ForgotPassPage();
-                                },
-                              ),
-                            );
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ResetPassword()));
                           },
                           child: const Text(
                             'forget passsword?',

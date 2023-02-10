@@ -1,8 +1,9 @@
 import 'package:dboy_two/auth/auth_screen.dart';
 import 'package:dboy_two/pages/orders/Delivered.dart';
 import 'package:dboy_two/pages/orders/allPendingOrders.dart';
-import 'package:dboy_two/pages/orders/order_details.dart';
+// import 'package:dboy_two/pages/orders/order_details.dart';
 import 'package:dboy_two/pages/orders/reason.dart';
+
 import 'package:dboy_two/pages/orders/verification.dart';
 import 'package:dboy_two/pages/ppages/home_page.dart';
 import 'package:dboy_two/pages/ppages/login_page.dart';
@@ -28,6 +29,7 @@ void main() async {
       // '/details_page': (context) =>  OrderDetailsPage(),
       '/reason_page': (context) => const ReasonPage(),
       '/verify': (context) => const VerificationPage(),
+      
     },
   ));
 }
