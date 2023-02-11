@@ -8,6 +8,7 @@ import 'package:dboy_two/pages/orders/verification.dart';
 import 'package:dboy_two/pages/ppages/home_page.dart';
 import 'package:dboy_two/pages/ppages/login_page.dart';
 import 'package:dboy_two/pages/ppages/main_homepage.dart';
+import 'package:dboy_two/pages/settings/change_pasword_page.dart';
 import 'package:dboy_two/pages/settings/settings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ void main() async {
       '/pendingOrders_page': (context) => const PendingOrdersPage(),
       '/delivered_page': (context) => const DeliveredPage(),
       '/settings_page': (context) => const SettingsPage(),
+      '/changePassword' :(context) => const ChangePassword(),
       // '/details_page': (context) =>  OrderDetailsPage(),
       '/reason_page': (context) => const ReasonPage(),
       '/verify': (context) => const VerificationPage(),

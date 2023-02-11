@@ -21,6 +21,21 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: IconButton(
+              onPressed: () {},
+              // onPressed: () => Navigator.of(context)
+              //     .push(MaterialPageRoute(builder: (_) => const SearchPage())),
+              icon: Icon(
+                Icons.search,
+                color: Colors.green[400],
+                size: 30,
+              ),
+            ),
+          )
+        ],
         backgroundColor: const Color.fromARGB(255, 44, 90, 46),
       ),
       body: Container(

@@ -26,7 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String _email = "";
   String _joinedDate = "";
   File? _image;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final ImagePicker imagePicker = ImagePicker();
 
@@ -73,26 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {});
   }
 
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to Logout?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('No'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Yes'),
-              ),
-            ],
-          ),
-        )) ??
-        false;
-  }
+  Future _update() async {}
 
   logoutMessage() async {
     return (await showDialog(
@@ -106,13 +87,47 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: const Text('No'),
               ),
               TextButton(
-                onPressed: () => Navigator.pushNamed(context, '/login_page'),
+                onPressed: () async {
+                  await _auth.signOut();
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamed(context, '/login_page');
+                },
                 child: const Text('Yes'),
               ),
             ],
           ),
         )) ??
         false;
+  }
+
+  Color primaryColor = const Color(0xff18203d);
+  Color secondaryColor = const Color(0xff232c51);
+  Color logoGreen = const Color(0xff25bcbb);
+
+  CollectionReference ref =
+      FirebaseFirestore.instance.collection('delivery person');
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
+  final bool _isLoading = false;
+
+  _builtTextField(TextEditingController controller, String labelText) {
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 223, 201, 201),
+          // border: Border.all(color: Colors.green)
+        ),
+        child: TextField(
+          controller: controller,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+              labelText: labelText,
+              labelStyle: const TextStyle(color: Colors.black),
+              border: InputBorder.none),
+        ));
   }
 
   @override
@@ -133,6 +148,87 @@ class _SettingsPageState extends State<SettingsPage> {
           builder: (context, snapshot) {
             return ListView(padding: const EdgeInsets.all(6), children: [
               imageCard(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 18, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ListView(
+                                          shrinkWrap: true,
+                                          children: <Widget>[
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            _builtTextField(
+                                                nameController, "Name"),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            _builtTextField(
+                                                emailController, 'Email'),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            _builtTextField(numberController,
+                                                'Phone Number'),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            GestureDetector(
+                                              onTap: _update,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 25.0),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  decoration: BoxDecoration(
+                                                    color: const Color.fromARGB(
+                                                        255, 108, 155, 109),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                  child: Center(
+                                                    child: _isLoading
+                                                        ? const CircularProgressIndicator(
+                                                            color: Colors.white,
+                                                          )
+                                                        : const Text(
+                                                            'Update',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 18,
+                                                            ),
+                                                          ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ));
+                        },
+                        child: const Icon(Icons.edit)),
+                  ],
+                ),
+              ),
               nameCard(),
               emailCard(),
               phoneCard(),
@@ -178,8 +274,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget nameCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
         child: Card(
-          shadowColor: Colors.green,
-          elevation: 3,
+          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          elevation: 6,
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -196,7 +292,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: ListTile(
               leading: const Icon(
                 Icons.person,
-                color: Colors.orange,
+                color: Colors.black,
               ),
               title: const Text(
                 'Name',
@@ -218,8 +314,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget emailCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
         child: Card(
-          shadowColor: Colors.green,
-          elevation: 3,
+          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          elevation: 6,
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -235,8 +331,8 @@ class _SettingsPageState extends State<SettingsPage> {
             padding: const EdgeInsets.all(8),
             child: ListTile(
               leading: const Icon(
-                Icons.person,
-                color: Colors.orange,
+                Icons.email_outlined,
+                color: Colors.black,
               ),
               title: const Text(
                 'Email',
@@ -258,8 +354,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget phoneCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
         child: Card(
-          shadowColor: Colors.green,
-          elevation: 3,
+          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          elevation: 6,
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -286,7 +382,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               subtitle: Text(
-                _phoneNumber,
+                "+251-$_phoneNumber",
                 style: const TextStyle(
                   fontSize: 15,
                 ),
@@ -299,8 +395,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget dateCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Card(
-          shadowColor: Colors.green,
-          elevation: 3,
+          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          elevation: 6,
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -345,8 +441,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget changePassword() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Card(
-          shadowColor: Colors.green,
-          elevation: 3,
+          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          elevation: 6,
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -387,14 +483,14 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget logoutCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Card(
-          shadowColor: Colors.green,
-          elevation: 3,
+          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          elevation: 6,
           child: Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [
                   Color.fromARGB(26, 15, 15, 15),
-                  Color.fromARGB(26, 15, 15, 15),
+                  Color.fromARGB(26, 196, 46, 46),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
