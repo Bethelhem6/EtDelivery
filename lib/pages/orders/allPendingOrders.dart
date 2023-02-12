@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dboy_two/pages/orders/order_details.dart';
+import 'package:dboy_two/pages/orders/search_order.dart';
 import 'package:flutter/material.dart';
 
 class PendingOrdersPage extends StatefulWidget {
@@ -10,6 +11,7 @@ class PendingOrdersPage extends StatefulWidget {
 }
 
 class _PendingOrdersPageState extends State<PendingOrdersPage> {
+  void searchOrder(String name) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,13 +23,15 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+                centerTitle: true,elevation: 0,
+
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: IconButton(
-              onPressed: () {},
-              // onPressed: () => Navigator.of(context)
-              //     .push(MaterialPageRoute(builder: (_) => const SearchPage())),
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch());
+              },
               icon: Icon(
                 Icons.search,
                 color: Colors.green[400],
@@ -67,8 +71,8 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Color.fromARGB(26, 233, 40, 40),
-                                Color.fromARGB(31, 228, 53, 53)
+                                Color.fromARGB(26, 252, 244, 244),
+                                Color.fromARGB(31, 248, 243, 243)
                               ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
@@ -89,16 +93,16 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                       child: Container(
                                         padding: const EdgeInsets.all(13),
                                         decoration: const BoxDecoration(
-                                          color:
-                                              Color.fromARGB(255, 146, 93, 91),
+                                          color: Colors.white,
                                         ),
                                         child: Center(
                                           child: Text(
                                             doc['status'],
                                             style: const TextStyle(
-                                              color: Colors.white,
+                                              color: Color.fromARGB(
+                                                  255, 146, 93, 91),
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 15,
+                                              fontSize: 18,
                                             ),
                                           ),
                                         ),
@@ -252,7 +256,7 @@ class _PendingOrdersPageState extends State<PendingOrdersPage> {
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15,
+                                                fontSize: 18,
                                               ),
                                             ),
                                           ),

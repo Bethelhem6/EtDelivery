@@ -138,43 +138,53 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
+        elevation: 0,
         backgroundColor: const Color.fromARGB(255, 44, 90, 46),
       ),
       body: ListView(padding: const EdgeInsets.all(6), children: [
         detailCard(),
         // paymentimageCard(),
       ]),
-      // bottomSheet: BottomSheet(
-      //     onClosing: () {},
-      //     builder: (context) {
-      //       return Container(
-      //         child: Container(
-      //           height: 50,
-      //           margin: const EdgeInsets.symmetric(horizontal: 85.5),
-      //           decoration: BoxDecoration(
-      //             color: Color.fromARGB(255, 108, 155, 109),
-      //             borderRadius: BorderRadius.circular(12),
-      //           ),
-      //           child: const Padding(
-      //             padding: EdgeInsets.fromLTRB(0, 3, 5, 0),
-      //             child: ListTile(
-      //               leading: Icon(
-      //                 Icons.check_circle_outline_outlined,
-      //                 size: 35,
-      //               ),
-      //               title: Text(
-      //                 'Delivered',
-      //                 style: TextStyle(
-      //                   color: Colors.white,
-      //                   fontWeight: FontWeight.bold,
-      //                   fontSize: 20,
-      //                 ),
-      //               ),
-      //             ),
-      //           ),
-      //         ),
-      //       );
-      //     }),
+      bottomSheet: BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return GestureDetector(
+              onTap: () {
+                deliverOrder(orderId: widget.orderId);
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 70,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 85.5, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 108, 155, 109),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Container(
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 3, 5, 0),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.check_circle_outline_outlined,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Delivered',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
     );
   }
 
@@ -217,15 +227,15 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           child: Container(
                             padding: const EdgeInsets.all(13),
                             decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 146, 93, 91),
+                              color: Colors.white,
                             ),
                             child: Center(
                               child: Text(
                                 doc['status'],
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Color.fromARGB(255, 146, 93, 91),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                  fontSize: 18,
                                 ),
                               ),
                             ),
@@ -276,8 +286,9 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         ),
                       ),
                       SelectableText(
-                        doc['delivery information']['city'],
-                        style: const TextStyle(fontSize: 18),
+                        "${doc['delivery information']['city']}, ${doc['delivery information']['subCity']}, ${doc['delivery information']['street']}",
+                        style: const TextStyle(
+                            fontSize: 15, overflow: TextOverflow.ellipsis),
                         toolbarOptions: const ToolbarOptions(
                           copy: true,
                           selectAll: true,
@@ -360,29 +371,43 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   OrdersDetail(
                       document: widget.orderId, collection: widget.collection),
 
-                  GestureDetector(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 85.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 108, 155, 109),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const ListTile(
-                          leading: Icon(Icons.check_circle),
-                          title: Text(
-                            'Delivered',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  const SizedBox(height: 20),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     deliverOrder(orderId: widget.orderId);
+
+                  //     Navigator.pop(context);
+                  //   },
+                  //   child: Container(
+                  //     height: 70,
+                  //     margin: const EdgeInsets.symmetric(
+                  //         horizontal: 85.5, vertical: 10),
+                  //     decoration: BoxDecoration(
+                  //       color: Color.fromARGB(255, 108, 155, 109),
+                  //       borderRadius: BorderRadius.circular(12),
+                  //     ),
+                  //     child: Container(
+                  //       child: const Padding(
+                  //         padding: EdgeInsets.fromLTRB(0, 3, 5, 0),
+                  //         child: ListTile(
+                  //           leading: Icon(
+                  //             Icons.check_circle_outline_outlined,
+                  //             size: 35,
+                  //             color: Colors.white,
+                  //           ),
+                  //           title: Text(
+                  //             'Delivered',
+                  //             style: TextStyle(
+                  //               color: Colors.white,
+                  //               fontWeight: FontWeight.bold,
+                  //               fontSize: 20,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -392,94 +417,44 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       });
 }
 
+void deliverOrder({required orderId}) async {
+  var doc = await FirebaseFirestore.instance
+      .collection("completed orders")
+      .doc(orderId)
+      .get();
 
+  try {
+    await FirebaseFirestore.instance
+        .collection('delivered orders')
+        .doc(orderId)
+        .set({
+      "customer information": {
+        'userId': doc["customer information"]["userId"],
+        'name': doc["customer information"]["name"],
+        'email': doc["customer information"]["email"],
+        'phoneNumber': doc["customer information"]["phoneNomber"],
+      },
+      "delivery information": {
+        'city': doc["delivery information"]["city"],
+        'subCity': doc["delivery information"]["subCity"],
+        'street': doc["delivery information"]["street"],
+      },
+      "ordered products": doc["ordered products"],
+      "TotalPricewithDelivery": doc["TotalPricewithDelivery"],
+      "deliveryFee": doc["deliveryFee"],
+      "subtotal": doc["subtotal"],
+      "orderData": doc["orderData"],
+      "orderId": doc["orderId"],
+      'name': doc["name"],
+      'status': "delivered"
+    });
+    await FirebaseFirestore.instance
+        .collection("completed orders")
+        .doc(orderId)
+        .delete();
 
-
-//   Widget paymentimageCard() {
-//     return Padding(
-//       padding: const EdgeInsets.fromLTRB(10, 18, 0, 0),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: const [
-//           Text('Payment Photo'),
-//           SizedBox(
-//             height: 10,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-
-              //Accept
-              //   Padding(
-              //     padding: const EdgeInsets.all(0),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //       children: [
-              //         GestureDetector(
-              //           onTap: () {
-              //             Navigator.pushNamed(context, '/');
-              //           },
-              //           child: Padding(
-              //             padding: const EdgeInsets.fromLTRB(20, 20, 10, 10),
-              //             child: Container(
-              //               padding: const EdgeInsets.all(25),
-              //               decoration: BoxDecoration(
-              //                 color: const Color.fromARGB(255, 84, 168, 73),
-              //                 borderRadius: BorderRadius.circular(10),
-              //               ),
-              //               child: const Center(
-              //                 child: Text(
-              //                   'Accept',
-              //                   style: TextStyle(
-              //                     color: Colors.white,
-              //                     fontWeight: FontWeight.bold,
-              //                     fontSize: 15,
-              //                   ),
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-
-              //         //Reject
-              //         Padding(
-              //           padding: const EdgeInsets.all(0),
-              //           child: Row(
-              //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //               children: [
-              //                 GestureDetector(
-              //                   onTap: () {
-              //                     Navigator.pushNamed(context, '/reasons_page');
-              //                   },
-              //                   child: Padding(
-              //                     padding:
-              //                         const EdgeInsets.fromLTRB(20, 20, 10, 10),
-              //                     child: Container(
-              //                       padding: const EdgeInsets.all(25),
-              //                       decoration: BoxDecoration(
-              //                         color: Colors.red,
-              //                         borderRadius: BorderRadius.circular(10),
-              //                       ),
-              //                       child: const Center(
-              //                         child: Text(
-              //                           'Reject',
-              //                           style: TextStyle(
-              //                             color: Colors.white,
-              //                             fontWeight: FontWeight.bold,
-              //                             fontSize: 15,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ]),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ],
-            
+    print("deleted");
+  } catch (e) {
+    print(e);
+  }
+}

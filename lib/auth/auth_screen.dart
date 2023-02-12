@@ -1,4 +1,5 @@
 
+import 'package:dboy_two/pages/ppages/home_page.dart';
 import 'package:dboy_two/pages/ppages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,12 @@ class AuthStateScreen extends StatelessWidget {
           if (snapshot.hasData) {
             return const MainPage();
           } else {
-            return const LoginPage();
+            return const HomePage();
           }
         } else if (snapshot.hasError) {
           return const Text('Error Occured');
         }
-        return const MainPage();
+        return const LoginPage();
       },
     );
   }

@@ -40,6 +40,8 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Password Resett"),
+                  centerTitle: true,elevation: 0,
+
           backgroundColor: const Color.fromARGB(255, 44, 90, 46),
         ),
         body: Center(

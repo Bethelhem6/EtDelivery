@@ -12,6 +12,7 @@ import 'package:dboy_two/pages/settings/change_pasword_page.dart';
 import 'package:dboy_two/pages/settings/settings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,15 @@ void main() async {
   runApp(MaterialApp(
     home: const AuthStateScreen(),
     debugShowCheckedModeBanner: false,
-    // initialRoute: '/home_page',
+    // initialRoute: '/home_page', theme: ThemeData(
+        
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          textTheme: TextTheme(
+            bodyText2: GoogleFonts.cormorantGaramond(),
+            bodyText1: GoogleFonts.cormorantGaramond(),
+          ),
+        ),
     routes: {
       '/home_page': (context) => const HomePage(),
       '/login_page': (context) => const LoginPage(),

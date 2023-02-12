@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String _email = "";
   String _joinedDate = "";
   File? _image;
+  bool isLoading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final ImagePicker imagePicker = ImagePicker();
@@ -73,7 +76,34 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {});
   }
 
-  Future _update() async {}
+  void _update(name, phoneNumber) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await FirebaseFirestore.instance
+        .collection("delivery person")
+        .doc(_uid)
+        .update({
+      "name": name,
+      "phoneNumber": phoneNumber,
+    });
+    setState(() {
+      _phoneNumber = phoneNumber;
+      _name = name;
+      isLoading = false;
+    });
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      duration: Duration(
+        milliseconds: 200,
+      ),
+      backgroundColor: Colors.black26,
+      content: Text(
+        "Updated successfully",
+      ),
+    ));
+  }
 
   logoutMessage() async {
     return (await showDialog(
@@ -89,7 +119,6 @@ class _SettingsPageState extends State<SettingsPage> {
               TextButton(
                 onPressed: () async {
                   await _auth.signOut();
-                  // ignore: use_build_context_synchronously
                   Navigator.pushNamed(context, '/login_page');
                 },
                 child: const Text('Yes'),
@@ -141,6 +170,8 @@ class _SettingsPageState extends State<SettingsPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+                centerTitle: true,elevation: 0,
+
         backgroundColor: const Color.fromARGB(255, 44, 90, 46),
       ),
       body: StreamBuilder<Object>(
@@ -173,18 +204,27 @@ class _SettingsPageState extends State<SettingsPage> {
                                             const SizedBox(
                                               height: 15,
                                             ),
-                                            _builtTextField(
-                                                emailController, 'Email'),
-                                            const SizedBox(
-                                              height: 15,
-                                            ),
                                             _builtTextField(numberController,
                                                 'Phone Number'),
                                             const SizedBox(
                                               height: 15,
                                             ),
                                             GestureDetector(
-                                              onTap: _update,
+                                              onTap: () {
+                                                print("calling");
+                                                _update(
+                                                    nameController.value.text ==
+                                                            ""
+                                                        ? _name
+                                                        : nameController
+                                                            .value.text,
+                                                    numberController
+                                                                .value.text ==
+                                                            ""
+                                                        ? _name
+                                                        : numberController
+                                                            .value.text);
+                                              },
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
@@ -200,7 +240,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                             12),
                                                   ),
                                                   child: Center(
-                                                    child: _isLoading
+                                                    child: isLoading
                                                         ? const CircularProgressIndicator(
                                                             color: Colors.white,
                                                           )
@@ -274,7 +314,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget nameCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
         child: Card(
-          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          shadowColor: const Color.fromARGB(255, 50, 190, 55),
           elevation: 6,
           child: Container(
             decoration: BoxDecoration(
@@ -314,7 +354,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget emailCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
         child: Card(
-          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          shadowColor: const Color.fromARGB(255, 50, 190, 55),
           elevation: 6,
           child: Container(
             decoration: BoxDecoration(
@@ -354,7 +394,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget phoneCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
         child: Card(
-          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          shadowColor: const Color.fromARGB(255, 50, 190, 55),
           elevation: 6,
           child: Container(
             decoration: BoxDecoration(
@@ -395,7 +435,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget dateCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Card(
-          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          shadowColor: const Color.fromARGB(255, 50, 190, 55),
           elevation: 6,
           child: Container(
             decoration: BoxDecoration(
@@ -441,7 +481,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget changePassword() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Card(
-          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          shadowColor: const Color.fromARGB(255, 50, 190, 55),
           elevation: 6,
           child: Container(
             decoration: BoxDecoration(
@@ -483,7 +523,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget logoutCard() => Padding(
         padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
         child: Card(
-          shadowColor: Color.fromARGB(255, 50, 190, 55),
+          shadowColor: const Color.fromARGB(255, 50, 190, 55),
           elevation: 6,
           child: Container(
             decoration: BoxDecoration(
