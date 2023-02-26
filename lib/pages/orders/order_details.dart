@@ -2,11 +2,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dboy_two/pages/orders/orders_detail_widget.dart';
 import 'package:dboy_two/widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 // ignore: must_be_immutable
@@ -27,16 +25,20 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
   XFile? imgXFile;
   final ImagePicker imagePicker = ImagePicker();
 
-  String _uid = "";
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String uid = "";
+  String phoneNumber = "";
 
   void _getData() async {
-    User? user = _auth.currentUser;
-    _uid = user!.uid;
+    print(widget.orderId);
+    final DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection("completed orders")
+        .doc(widget.orderId)
+        .get();
 
-    final DocumentSnapshot userDocs =
-        await FirebaseFirestore.instance.collection("customer").doc(_uid).get();
-    setState(() {});
+    setState(() {
+      uid = doc["customer information"]["userId"];
+      phoneNumber = doc["customer information"]["phoneNumber"];
+    });
   }
 
   @override
@@ -151,7 +153,11 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           builder: (context) {
             return GestureDetector(
               onTap: () {
-                deliverOrder(orderId: widget.orderId);
+                deliverOrder(
+                  orderId: widget.orderId,
+                  phoneNumber: phoneNumber,
+                  uid: uid,
+                );
                 Navigator.pop(context);
               },
               child: Container(
@@ -299,28 +305,6 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       )
                     ],
                   ),
-                  // Text(_address),
-
-                  // Row(
-                  //   children: [
-                  //     const ListTile(
-                  //       leading: Icon(
-                  //         Icons.location_on,
-                  //         color: Colors.black,
-                  //       ),
-                  //       title: Text('Address'),
-                  // subtitle: SelectableText(
-                  //   _address,
-                  //   style: const TextStyle(
-                  //     fontSize: 15,
-                  //   ),
-                  // ),
-                  // ),
-                  // Text(_address),
-                  // ],
-                  // ),
-
-                  //customers location information to be copied
 
                   const SizedBox(height: 10),
                   const Text(
@@ -372,42 +356,6 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       document: widget.orderId, collection: widget.collection),
 
                   const SizedBox(height: 20),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     deliverOrder(orderId: widget.orderId);
-
-                  //     Navigator.pop(context);
-                  //   },
-                  //   child: Container(
-                  //     height: 70,
-                  //     margin: const EdgeInsets.symmetric(
-                  //         horizontal: 85.5, vertical: 10),
-                  //     decoration: BoxDecoration(
-                  //       color: Color.fromARGB(255, 108, 155, 109),
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //     child: Container(
-                  //       child: const Padding(
-                  //         padding: EdgeInsets.fromLTRB(0, 3, 5, 0),
-                  //         child: ListTile(
-                  //           leading: Icon(
-                  //             Icons.check_circle_outline_outlined,
-                  //             size: 35,
-                  //             color: Colors.white,
-                  //           ),
-                  //           title: Text(
-                  //             'Delivered',
-                  //             style: TextStyle(
-                  //               color: Colors.white,
-                  //               fontWeight: FontWeight.bold,
-                  //               fontSize: 20,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // )
                 ],
               ),
             ),
@@ -417,7 +365,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       });
 }
 
-void deliverOrder({required orderId}) async {
+void deliverOrder(
+    {required orderId, required phoneNumber, required uid}) async {
   var doc = await FirebaseFirestore.instance
       .collection("completed orders")
       .doc(orderId)
@@ -429,10 +378,10 @@ void deliverOrder({required orderId}) async {
         .doc(orderId)
         .set({
       "customer information": {
-        'userId': doc["customer information"]["userId"],
+        'userId': uid,
         'name': doc["customer information"]["name"],
         'email': doc["customer information"]["email"],
-        'phoneNumber': doc["customer information"]["phoneNomber"],
+        'phoneNumber': phoneNumber,
       },
       "delivery information": {
         'city': doc["delivery information"]["city"],
