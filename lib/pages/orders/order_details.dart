@@ -30,7 +30,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
 
   void _getData() async {
     print(widget.orderId);
-    final DocumentSnapshot doc = await FirebaseFirestore.instance
+    try {
+      final DocumentSnapshot doc = await FirebaseFirestore.instance
         .collection("completed orders")
         .doc(widget.orderId)
         .get();
@@ -39,6 +40,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       uid = doc["customer information"]["userId"];
       phoneNumber = doc["customer information"]["phoneNumber"];
     });
+    } catch (e) {
+      print(e);
+    }
+    
   }
 
   @override
